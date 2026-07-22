@@ -1,0 +1,4 @@
+(executable
+ (name deriv_demo)
+ (modules deriv_demo)
+ (libraries autograd))

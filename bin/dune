@@ -1,0 +1,5 @@
+(executable
+ (name main)
+ (public_name autograd)
+ (modules main)
+ (libraries autograd))
