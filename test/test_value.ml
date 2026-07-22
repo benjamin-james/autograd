@@ -43,5 +43,30 @@ let () =
     zero_grad z
   done;
 
+  (* Check exp: z = (exp a) (exp b) *)
+  for _ = 1 to 100 do
+    let a = make_leaf (Random.float 5.0) in
+    let b = make_leaf (Random.float 5.0) in
+    let z = add (exp a) (mul a b) in
+    backward z;
+    check "dz/da" a.grad ((Stdlib.exp a.vals) +. b.vals);
+    check "dz/db" b.grad a.vals;
+    zero_grad z
+  done;
+  (* Check exp: z=e^(e^a) for accumulation *)
+  for _ = 1 to 100 do
+    let a = make_leaf ((Random.float 4.0) -. 2.0) in
+    let z = (exp (exp a)) in
+    backward z;
+    check "dz/da" a.grad (z.vals *. (Stdlib.exp a.vals));
+    zero_grad z
+  done;
+  (* chain rule for exp, test multiple consumer on single var *)
+  for _ = 1 to 100 do
+    let a = make_leaf ((Random.float 4.0) -. 2.0) in
+    let z = (mul a (exp a)) in
+    backward z;
+    check "dz/da" a.grad (z.vals +. (Stdlib.exp a.vals));
+  done;
   Printf.printf "done, %d failures\n" !fails;
   if !fails > 0 then exit 1

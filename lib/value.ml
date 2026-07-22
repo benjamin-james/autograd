@@ -6,7 +6,7 @@
    parents via the chain rule. *)
 
 type t = { id : int; mutable vals : float; mutable grad : float; op : op }
-and op = ADD of t * t | MUL of t * t | LEAF
+and op = ADD of t * t | MUL of t * t | EXP of t | LEAF
 
 let _id = ref 0
 
@@ -32,7 +32,9 @@ let make_node x op =
 
 let add a b = make_node (a.vals +. b.vals) (ADD (a, b))
 let mul a b = make_node (a.vals *. b.vals) (MUL (a, b))
-let parents = function ADD (a, b) | MUL (a, b) -> [ a; b ] | LEAF -> []
+let exp a = make_node (Stdlib.exp a.vals) (EXP (a))
+
+let parents = function ADD (a, b) | MUL (a, b) -> [ a; b ] | LEAF -> [] | EXP (a) -> [a]
 
 (* Post-order DFS: parents visited after all their consumers, so a
    shared parent's grad is fully accumulated before its own backward
@@ -61,6 +63,8 @@ let backward root =
       | MUL (a, b) ->
           a.grad <- a.grad +. (b.vals *. n.grad);
           b.grad <- b.grad +. (a.vals *. n.grad)
+      | EXP (a) ->
+        a.grad <- a.grad +. (n.vals *. n.grad)
       | LEAF -> ())
     (reverse_topo root)
 
