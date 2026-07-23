@@ -1,4 +1,9 @@
-(executable
+(test
  (name test_value)
  (modules test_value)
+ (libraries autograd))
+
+(test
+ (name test_fd)
+ (modules test_fd)
  (libraries autograd))
