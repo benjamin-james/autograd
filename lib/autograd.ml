@@ -2,3 +2,6 @@
    and call [make_leaf], [add], [mul], [backward], ... unqualified.
  *)
 include Value
+
+let gelu = Nn.gelu
+let silu = Nn.silu

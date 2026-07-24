@@ -1,4 +1,4 @@
 (library
  (name autograd)
  (public_name autograd)
- (modules value autograd))
+ (modules value autograd nn))

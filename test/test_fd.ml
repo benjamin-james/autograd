@@ -304,6 +304,24 @@ let cases : case list =
             (tanh (add (mul a b) (sigmoid c)))
             (sqrt (add (pow a 2) (pow b 2))));
     };
+    {
+      name = "gelu(a)";
+      arity = 1;
+      range = (-5.0, 5.0);
+      build =
+        (fun xs ->
+          let a = take1 xs in
+          gelu a);
+    };
+    {
+      name = "silu(a)";
+      arity = 1;
+      range = (-5.0, 5.0);
+      build =
+        (fun xs ->
+          let a = take1 xs in
+          silu a);
+    };
   ]
 
 let () =
