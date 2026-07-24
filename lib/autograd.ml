@@ -5,3 +5,7 @@ include Value
 
 let gelu = Nn.gelu
 let silu = Nn.silu
+
+module Nn = struct
+  include Nn
+end
