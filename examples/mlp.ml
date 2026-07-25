@@ -4,6 +4,7 @@ let () =
   Random.self_init ();
   let rng () = Random.float 1.0 -. 0.5 in
   let net = Nn.make_mlp ~act:gelu ~rng [| 2; 4; 1 |] in
+  let opt = Nn.make_sgd ~lr:0.1 ~momentum:0.9 net.params in
   (* learn an XOR *)
   let xs =
     [| [| 0.0; 0.0 |]; [| 0.0; 1.0 |]; [| 1.0; 0.0 |]; [| 1.0; 1.0 |] |]
@@ -18,7 +19,7 @@ let () =
     let preds = predict_all () in
     let loss = Nn.mse preds targets in
     backward loss;
-    Nn.sgd_step ~lr:0.1 net.params
+    Nn.sgd_step opt
   done;
   let after = (loss_at ()).vals in
   Printf.printf "2-4-1 XOR MLP\n";
