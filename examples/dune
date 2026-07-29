@@ -7,3 +7,8 @@
  (name mlp)
  (modules mlp)
  (libraries autograd))
+
+(executable
+ (name sine_reg)
+ (modules sine_reg)
+ (libraries autograd))
